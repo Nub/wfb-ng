@@ -40,8 +40,8 @@ class SendPacket(DatagramProtocol):
 
 class UDPProxyTestCase(unittest.TestCase):
     def setUp(self):
-        self.arm_proto = MavlinkARMProtocol(call_on_arm='/bin/true',
-                                            call_on_disarm='/bin/true')
+        self.arm_proto = MavlinkARMProtocol(call_on_arm='true',
+                                            call_on_disarm='true')
 
         self.p1 = MavlinkUDPProxyProtocol(addr=None, mirror=None, agg_max_size=1445, agg_timeout=1, inject_rssi=True, mavlink_sys_id=3, mavlink_comp_id=242,
                                           rx_hooks=[self.arm_proto.dataReceived], tx_hooks=[self.arm_proto.dataReceived])

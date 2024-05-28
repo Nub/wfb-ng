@@ -1,5 +1,5 @@
 ARCH ?= $(shell uname -i)
-PYTHON ?= /usr/bin/python3
+PYTHON ?= $(which python3)
 COMMIT ?= $(shell git rev-parse HEAD)
 VERSION ?= $(shell $(PYTHON) ./version.py $(shell git show -s --format="%ct" $(shell git rev-parse HEAD)) $(shell git rev-parse --abbrev-ref HEAD))
 SOURCE_DATE_EPOCH ?= $(shell git show -s --format="%ct" $(shell git rev-parse HEAD))
@@ -9,7 +9,7 @@ DOCKER_SRC_IMAGE ?= "p2ptech/cross-build:2023-02-21-raspios-bullseye-armhf-lite"
 export VERSION COMMIT SOURCE_DATE_EPOCH
 
 _LDFLAGS := $(LDFLAGS) -lrt -lsodium
-_CFLAGS := $(CFLAGS) -Wall -O2 -DWFB_VERSION='"$(VERSION)-$(shell /bin/bash -c '_tmp=$(COMMIT); echo $${_tmp::8}')"'
+_CFLAGS := $(CFLAGS) -Wall -O2 -DWFB_VERSION='"$(VERSION)-$(shell bash -c '_tmp=$(COMMIT); echo $${_tmp::8}')"'
 
 all: all_bin gs.key test
 
@@ -39,7 +39,7 @@ wfb_keygen: src/keygen.o
 	$(CC) -o $@ $^ $(_LDFLAGS)
 
 test: all_bin
-	PYTHONPATH=`pwd` trial3 wfb_ng.tests
+	PYTHONPATH=`pwd` trial wfb_ng.tests
 
 rpm:  all_bin $(ENV)
 	rm -rf dist
