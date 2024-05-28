@@ -20,6 +20,22 @@
           pyserial
         ]);
 
+        wfb_cfg = pkgs.writeText "wifibroadcast.cfg" ''
+        [common]
+        wifi_channel = 161     # 161 -- radio channel @5825 MHz, range: 5815–5835 MHz, width 20MHz
+                               # 1 -- radio channel @2412 Mhz, 
+                               # see https://en.wikipedia.org/wiki/List_of_WLAN_channels for reference
+        wifi_region = 'BO'     # Your country for CRDA (use BO or GY if you want max tx power)  
+
+        [gs_mavlink]
+        peer = 'connect://127.0.0.1:14550'  # outgoing connection
+        # peer = 'listen://0.0.0.0:14550'   # incoming connection
+
+        [gs_video]
+        peer = 'connect://127.0.0.1:5600'  # outgoing connection for
+                                           # video sink (QGroundControl on GS)
+        '';
+
         # Target platform libraries
         buildInputs = with pkgs;[
           libpcap
@@ -39,6 +55,7 @@
         propogatedBuildInputs = with pkgs; [
          iw
          py
+         wfb_cfg
         ];
 
       in rec {
@@ -52,12 +69,17 @@
           inherit buildInputs nativeBuildInputs propogatedBuildInputs;
 
           buildPhase = ''
-          make deb
+          make 
           '';
 
           installPhase = ''
-          dpkg-deb -x $src .
           mkdir -p $out/bin
+          cp wfb_rx $out/bin
+          cp wfb_tx $out/bin
+          cp wfb_keygen $out/bin
+
+          mkdir -p $out/etc
+          cp ${wfb_cfg} $out/etc/wifibroadcast.cfg
           '';
         };
 
