@@ -20,9 +20,9 @@ except ImportError:
 version = os.environ.get('VERSION') or 'trunk'
 commit = os.environ.get('COMMIT')
 
-if version and commit:
-    with open('wfb_ng/conf/site.cfg', 'w') as fd:
-        fd.write("# Don't make any changes here, use local.cfg instead!\n\n[common]\nversion = %r\ncommit = %r\n" % (version, commit))
+# if version and commit:
+#     with open('wfb_ng/conf/site.cfg', 'w') as fd:
+#         fd.write("# Don't make any changes here, use local.cfg instead!\n\n[common]\nversion = %r\ncommit = %r\n" % (version, commit))
 
 def _long_description():
     with open('README.md', encoding='utf-8') as fd:
@@ -46,7 +46,7 @@ setup(
                                       'wfb-test-latency=wfb_ng.latency_test:main',
                                       'wfb-server=wfb_ng.server:main']},
     package_data={'wfb_ng.conf': ['master.cfg', 'site.cfg']},
-    data_files = [('/usr/bin', ['wfb_tx', 'wfb_rx', 'wfb_keygen', 'scripts/wfb-cli-x11']),
+    data_files = [('/usr/bin', ['scripts/wfb-cli-x11']),
                   ('/lib/systemd/system', ['scripts/wifibroadcast.service',
                                            'scripts/wifibroadcast@.service']),
                   ('/etc/default', ['scripts/default/wifibroadcast']),

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 if [ -z "$WFB_CLI" ]
 then
    WFB_CLI=1 exec xterm -fn 9x15 -fg orange2 -bg black +sb -e $0 $1

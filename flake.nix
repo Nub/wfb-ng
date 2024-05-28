@@ -11,15 +11,6 @@
         # Select host system packages
         pkgs = nixpkgs.legacyPackages.${system};
 
-        py = pkgs.python3.withPackages (p: with p;[
-          pip
-          pyroute2
-          future
-          msgpack
-          twisted
-          pyserial
-        ]);
-
         wfb_cfg = pkgs.writeText "wifibroadcast.cfg" ''
         [common]
         wifi_channel = 161     # 161 -- radio channel @5825 MHz, range: 5815–5835 MHz, width 20MHz
@@ -36,6 +27,24 @@
                                            # video sink (QGroundControl on GS)
         '';
 
+        wfb_cli = pkgs.python3Packages.buildPythonApplication rec {
+          name = "wfb_cli";
+          src = ./.;
+          VERSION = "0.1";
+          COMMIT = "0";
+
+          doCheck = false;
+
+          propagatedBuildInputs = with pkgs.python3Packages; [
+            pyroute2
+            future
+            msgpack
+            twisted
+            pyserial
+            setuptools
+          ];
+        };
+
         # Target platform libraries
         buildInputs = with pkgs;[
           libpcap
@@ -44,18 +53,18 @@
 
         # Host platform tools
         nativeBuildInputs = with pkgs; [
-          py
           clang
           virtualenv
           pkg-config
           dpkg
           autoPatchelfHook
+          wfb_cli
         ];
 
         propogatedBuildInputs = with pkgs; [
          iw
-         py
          wfb_cfg
+         wfb_cli
         ];
 
       in rec {
