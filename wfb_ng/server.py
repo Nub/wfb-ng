@@ -591,7 +591,7 @@ def init_udp_direct_tx(service_name, cfg, wlans, link_id, ant_sel_f):
            '-B %(bw)d -G %(gi)s -S %(stbc)d -L %(ldpc)d -M %(mcs)d'\
            '%(mirror)s%(force_vht)s '\
            '-k %(fec_k)d -n %(fec_n)d -T %(fec_timeout)d -i %(link_id)d -R %(rcv_buf_size)d' % \
-           dict(cmd=os.path.join(settings.path.bin_dir, 'wfb_tx'),
+           dict(cmd='wfb_tx',
                 frame_type=cfg.frame_type,
                 stream=cfg.stream_tx,
                 port=listen[1],
@@ -627,7 +627,7 @@ def init_udp_direct_rx(service_name, cfg, wlans, link_id, ant_sel_f):
     log.msg('Send %s stream %d to %s:%d' % (service_name, cfg.stream_rx, connect[0], connect[1]))
 
     cmd = ('%(cmd)s -p %(stream)d -c %(ip_addr)s -u %(port)d -K %(key)s -i %(link_id)d' % \
-           dict(cmd=os.path.join(settings.path.bin_dir, 'wfb_rx'),
+           dict(cmd='wfb_rx',
                 stream=cfg.stream_rx,
                 ip_addr=connect[0],
                 port=connect[1],
@@ -702,7 +702,7 @@ def init_mavlink(service_name, cfg, wlans, link_id, ant_sel_f):
     sockets = [rx_socket]
 
     cmd_rx = ('%(cmd)s -p %(stream)d -u %(port)d -K %(key)s -i %(link_id)d' % \
-              dict(cmd=os.path.join(settings.path.bin_dir, 'wfb_rx'),
+              dict(cmd='wfb_rx',
                    stream=cfg.stream_rx,
                    port=rx_socket.getHost().port,
                    key=os.path.join(settings.path.conf_dir, cfg.keypair),
@@ -712,7 +712,7 @@ def init_mavlink(service_name, cfg, wlans, link_id, ant_sel_f):
               '-G %(gi)s -S %(stbc)d -L %(ldpc)d -M %(mcs)d'\
               '%(mirror)s%(force_vht)s '\
               '-k %(fec_k)d -n %(fec_n)d -T %(fec_timeout)d -i %(link_id)d -R %(rcv_buf_size)d' % \
-              dict(cmd=os.path.join(settings.path.bin_dir, 'wfb_tx'),
+              dict(cmd='wfb_tx',
                    frame_type=cfg.frame_type,
                    stream=cfg.stream_tx,
                    port=0,
@@ -794,7 +794,7 @@ def init_tunnel(service_name, cfg, wlans, link_id, ant_sel_f):
     sockets = [rx_socket]
 
     cmd_rx = ('%(cmd)s -p %(stream)d -u %(port)d -K %(key)s -i %(link_id)d' % \
-              dict(cmd=os.path.join(settings.path.bin_dir, 'wfb_rx'),
+              dict(cmd='wfb_rx',
                    stream=cfg.stream_rx,
                    port=rx_socket.getHost().port,
                    key=os.path.join(settings.path.conf_dir, cfg.keypair),
@@ -804,7 +804,7 @@ def init_tunnel(service_name, cfg, wlans, link_id, ant_sel_f):
               '-S %(stbc)d -L %(ldpc)d -M %(mcs)d'\
               '%(mirror)s%(force_vht)s '\
               '-k %(fec_k)d -n %(fec_n)d -T %(fec_timeout)d -i %(link_id)d -R %(rcv_buf_size)d' % \
-              dict(cmd=os.path.join(settings.path.bin_dir, 'wfb_tx'),
+              dict(cmd='wfb_tx',
                    frame_type=cfg.frame_type,
                    stream=cfg.stream_tx,
                    port=0,
@@ -893,7 +893,7 @@ def init_udp_proxy(service_name, cfg, wlans, link_id, ant_sel_f):
         rx_socket = reactor.listenUDP(0, p_rx)
         sockets = [rx_socket]
         cmd_rx = ('%(cmd)s -p %(stream)d -u %(port)d -K %(key)s -i %(link_id)d' % \
-                  dict(cmd=os.path.join(settings.path.bin_dir, 'wfb_rx'),
+                  dict(cmd='wfb_rx',
                        stream=cfg.stream_rx,
                        port=rx_socket.getHost().port,
                        key=os.path.join(settings.path.conf_dir, cfg.keypair),
@@ -906,7 +906,7 @@ def init_udp_proxy(service_name, cfg, wlans, link_id, ant_sel_f):
                   '-G %(gi)s -S %(stbc)d -L %(ldpc)d -M %(mcs)d'\
                   '%(mirror)s%(force_vht)s '\
                   '-k %(fec_k)d -n %(fec_n)d -T %(fec_timeout)d -i %(link_id)d -R %(rcv_buf_size)d' % \
-                  dict(cmd=os.path.join(settings.path.bin_dir, 'wfb_tx'),
+                  dict(cmd='wfb_tx',
                        frame_type=cfg.frame_type,
                        stream=cfg.stream_tx,
                        port=0,
