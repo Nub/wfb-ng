@@ -27,13 +27,11 @@
                                            # video sink (QGroundControl on GS)
         '';
 
-        wfb_cli = pkgs.python3Packages.buildPythonApplication rec {
+        wfb-cli = pkgs.python3Packages.buildPythonApplication rec {
           name = "wfb_cli";
           src = ./.;
           VERSION = "0.1";
           COMMIT = "0";
-
-          doCheck = false;
 
           propagatedBuildInputs = with pkgs.python3Packages; [
             pyroute2
@@ -42,40 +40,36 @@
             twisted
             pyserial
             setuptools
+            wfb-ng
           ];
+          nativeBuildInputs = propagatedBuildInputs;
+          buildInputs = propagatedBuildInputs;
         };
 
-        # Target platform libraries
-        buildInputs = with pkgs;[
-          libpcap
-          libsodium
-        ];
-
-        # Host platform tools
-        nativeBuildInputs = with pkgs; [
-          clang
-          virtualenv
-          pkg-config
-          dpkg
-          autoPatchelfHook
-          wfb_cli
-        ];
-
-        propogatedBuildInputs = with pkgs; [
-         iw
-         wfb_cfg
-         wfb_cli
-        ];
-
-      in rec {
-        # Systemd unit
-        # nixosModules.themis = import ./module.nix packages.default;
-
-        # For `nix build` & `nix run`:
-        packages.default = pkgs.stdenv.mkDerivation {
+        wfb-ng = pkgs.stdenv.mkDerivation {
           name = "wfb-ng";
           src = ./.;
-          inherit buildInputs nativeBuildInputs propogatedBuildInputs;
+
+          # Target platform libraries
+          buildInputs = with pkgs;[
+            libpcap
+            libsodium
+          ];
+
+          # Host platform tools
+          nativeBuildInputs = with pkgs; [
+            clang
+            virtualenv
+            pkg-config
+            dpkg
+            autoPatchelfHook
+            git
+          ];
+
+          propogatedBuildInputs = with pkgs; [
+           iw
+           wfb_cfg
+          ];
 
           buildPhase = ''
           make 
@@ -92,9 +86,17 @@
           '';
         };
 
+
+      in rec {
+        # Systemd unit
+        # nixosModules.themis = import ./module.nix packages.default;
+
+        # For `nix build` & `nix run`:
+        packages.default = wfb-cli;
+
         # For `nix develop`:
         devShell = pkgs.mkShell {
-          inherit buildInputs nativeBuildInputs propogatedBuildInputs;
+          nativeBuildInputs = [wfb-cli wfb-ng pkgs.iw];
         };
       });
 }

@@ -966,7 +966,7 @@ def main():
         log.theLogPublisher._startLogging(obs.emit, False)
 
 
-    log.msg('WFB-ng version %s-%s' % (settings.common.version, settings.common.commit[:8]))
+    # log.msg('WFB-ng version %s-%s' % (settings.common.version, settings.common.commit[:8]))
     profiles, wlans = sys.argv[1], list(wlan for arg in sys.argv[2:] for wlan in arg.split())
     uname = os.uname()
     log.msg('Run on %s/%s @%s, profile(s) %s using %s' % (uname[4], uname[2], uname[1], profiles, ', '.join(wlans)))

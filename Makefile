@@ -11,7 +11,7 @@ export VERSION COMMIT SOURCE_DATE_EPOCH
 _LDFLAGS := $(LDFLAGS) -lrt -lsodium
 _CFLAGS := $(CFLAGS) -Wall -O2 -DWFB_VERSION='"$(VERSION)-$(shell bash -c '_tmp=$(COMMIT); echo $${_tmp::8}')"'
 
-all: all_bin gs.key test
+all: all_bin gs.key #test
 
 $(ENV):
 	virtualenv --python=$(PYTHON) $(ENV)
@@ -38,8 +38,8 @@ wfb_tx: src/tx.o src/fec.o src/wifibroadcast.o
 wfb_keygen: src/keygen.o
 	$(CC) -o $@ $^ $(_LDFLAGS)
 
-test: all_bin
-	PYTHONPATH=`pwd` trial wfb_ng.tests
+# test: all_bin
+# 	PYTHONPATH=`pwd` trial wfb_ng.tests
 
 rpm:  all_bin $(ENV)
 	rm -rf dist

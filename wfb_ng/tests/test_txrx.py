@@ -28,7 +28,8 @@ class UDP_TXRX(DatagramProtocol):
 class TXRXTestCase(unittest.TestCase):
     @defer.inlineCallbacks
     def setUp(self):
-        bindir = os.path.join(os.path.dirname(__file__), '../..')
+        # bindir = os.path.join(os.path.dirname(__file__), '../..')
+        bindir = ''
         yield call_and_check_rc(os.path.join(bindir, 'wfb_keygen'))
 
         self.rxp = UDP_TXRX(('127.0.0.1', 10001))
