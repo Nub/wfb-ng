@@ -11,13 +11,13 @@ in {
       description = "The wfb package to use";
     };
     profiles = mkOption {
-      type = types.list;
+      type = types.listOf types.str;
       default = [ "udp_gs" ];
       apply = x: strings.concatStrings (strings.intersperse ":" x);
       description = "The profiles to run from the config";
     };
     interfaces = mkOption {
-      type = types.list;
+      type = types.listOf types.str;
       default = [ "wfb0" ];
       apply = x: strings.concatStrings (strings.intersperse " " x);
       description = "The interface to run the server on";
