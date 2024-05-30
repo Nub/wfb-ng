@@ -47,13 +47,13 @@ in {
 
     environment.systemPackages = [cfg.pkg];
 
-    networking.firewall.interfaces.wfb0 = {
-      allowedTCPPorts = [ 22 2222 14550 9000 9001 ];
-      allowedUDPPortRanges = [{
-        from = 14000;
-        to = 15000;
-      }];
-    };
+#    networking.firewall.interfaces.wfb0 = {
+#      allowedTCPPorts = [ 22 2222 14550 9000 9001 ];
+#      allowedUDPPortRanges = [{
+#        from = 14000;
+#        to = 15000;
+#      }];
+#    };
 
     services.udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="net", DRIVERS=="rtl88XXau", NAME="wfb0"
