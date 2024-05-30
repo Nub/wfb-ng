@@ -45,6 +45,8 @@ in {
   config = mkIf cfg.enable {
     boot.extraModulePackages = [ wfb-driver ];
 
+    environment.systemPackages = [cfg.pkg];
+
     networking.firewall.interfaces.wfb0 = {
       allowedTCPPorts = [ 22 2222 14550 9000 9001 ];
       allowedUDPPortRanges = [{
