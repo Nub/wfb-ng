@@ -1,13 +1,15 @@
-wfb_pkg:
+wfb-pkg: wfb-driver-nix:
 { lib, config, ... }:
 with lib;
-let cfg = config.services.wfb;
+let 
+cfg = config.services.wfb;
+wfb-driver = config.boot.kernelPackages.callPackage wfb-driver-nix {};
 in {
   options.services.wfb = {
     enable = mkEnableOption "Enable WFB-NG Module";
     pkg = mkOption {
       type = types.package;
-      default = wfb_pkg;
+      default = wfb-pkg;
       description = "The wfb package to use";
     };
     profiles = mkOption {
@@ -41,8 +43,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    boot.extraModulePackages = with config.boot.kernelPackages;
-      [ rtl88xxau-aircrack ];
+    boot.extraModulePackages = [ wfb-driver ];
 
     networking.firewall.interfaces.wfb0 = {
       allowedTCPPorts = [ 22 2222 14550 9000 9001 ];
