@@ -26,6 +26,7 @@
             setuptools
             wfb-ng
             pkgs.iw
+            pkgs.iproute2
           ];
           nativeBuildInputs = propagatedBuildInputs;
           buildInputs = propagatedBuildInputs;
