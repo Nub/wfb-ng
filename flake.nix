@@ -68,15 +68,11 @@
           '';
         };
 
+      in {
+        nixosModules.wfb = (import ./module.nix) wfb-cli (import ./driver.nix);
 
-      in rec {
-        # Systemd unit
-        nixosModules.wfb = (import ./module.nix) packages.default;
-
-        # For `nix build` & `nix run`:
         packages.default = wfb-cli;
 
-        # For `nix develop`:
         devShell = pkgs.mkShell {
           nativeBuildInputs = [wfb-cli wfb-ng];
         };

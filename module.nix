@@ -1,26 +1,33 @@
-wfb_pkg:
+wfb-pkg: wfb-driver-nix:
 { lib, config, ... }:
 with lib;
-let cfg = config.services.wfb;
+let 
+cfg = config.services.wfb;
+wfb-driver = config.boot.kernelPackages.callPackage wfb-driver-nix {};
 in {
   options.services.wfb = {
     enable = mkEnableOption "Enable WFB-NG Module";
     pkg = mkOption {
-      type = types.pkg;
-      default = wfb_pkg;
+      type = types.package;
+      default = wfb-pkg;
       description = "The wfb package to use";
     };
     profiles = mkOption {
-      type = types.list;
+      type = types.listOf types.str;
       default = [ "udp_gs" ];
       apply = x: strings.concatStrings (strings.intersperse ":" x);
       description = "The profiles to run from the config";
     };
     interfaces = mkOption {
-      type = types.list;
+      type = types.listOf types.str;
       default = [ "wfb0" ];
       apply = x: strings.concatStrings (strings.intersperse " " x);
       description = "The interface to run the server on";
+    };
+    working_dir = mkOption {
+      type = types.str;
+      default = "/home/wfb/";
+      description = "Where to run the wfb-server (keys and configs should be found here)";
     };
     # TODO: support config files for providing profiles etc
     # config = mkOption {
@@ -36,8 +43,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    boot.extraModulePackages = with config.boot.kernelPackages;
-      [ rtl88xxau-aircrack ];
+    boot.extraModulePackages = [ wfb-driver ];
 
     networking.firewall.interfaces.wfb0 = {
       allowedTCPPorts = [ 22 2222 14550 9000 9001 ];
@@ -50,6 +56,11 @@ in {
     services.udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="net", DRIVERS=="rtl88XXau", NAME="wfb0"
     '';
+
+    systemd.user.tmpfiles.rules = [
+      "d ${cfg.working_dir}/logs 1777 @wheel - -"
+      "d ${cfg.working_dir}/tmp 1777 @wheel - -"
+    ];
 
     systemd.services.wfb = {
       enable = cfg.enable;
