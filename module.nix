@@ -6,7 +6,7 @@ in {
   options.services.wfb = {
     enable = mkEnableOption "Enable WFB-NG Module";
     pkg = mkOption {
-      type = types.pkg;
+      type = types.package;
       default = wfb_pkg;
       description = "The wfb package to use";
     };
