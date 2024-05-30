@@ -53,7 +53,6 @@
 
           propogatedBuildInputs = with pkgs; [
            iw
-           wfb_cfg
           ];
 
           buildPhase = ''
