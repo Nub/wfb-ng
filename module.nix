@@ -22,6 +22,11 @@ in {
       apply = x: strings.concatStrings (strings.intersperse " " x);
       description = "The interface to run the server on";
     };
+    working_dir = mkOption {
+      type = types.str;
+      default = "/home/wfb/";
+      description = "Where to run the wfb-server (keys and configs should be found here)";
+    };
     # TODO: support config files for providing profiles etc
     # config = mkOption {
     #   type = types.pkg;
@@ -50,6 +55,11 @@ in {
     services.udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="net", DRIVERS=="rtl88XXau", NAME="wfb0"
     '';
+
+    systemd.user.tmpfiles.rules = [
+      "d ${cfg.working_dir}/logs 1777 @wheel - -"
+      "d ${cfg.working_dir}/tmp 1777 @wheel - -"
+    ];
 
     systemd.services.wfb = {
       enable = cfg.enable;
