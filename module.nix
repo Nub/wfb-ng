@@ -14,7 +14,7 @@ in {
     };
     profiles = mkOption {
       type = types.listOf types.str;
-      default = [ "udp_gs" ];
+      default = [ "gcs" ];
       apply = x: strings.concatStrings (strings.intersperse ":" x);
       description = "The profiles to run from the config";
     };
