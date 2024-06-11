@@ -213,3 +213,36 @@ Community support:
 ---------------
 Telegram group: (**wfb-ng support**) https://t.me/wfb_ng
 Please note, that it is only one official group.
+
+
+
+## Argument notes
+
+- VHT `-V`: bool
+
+- VHT nss `-N`: [1,2,3,4]
+    - Number of spatial streams
+
+- LDPC `-L`
+    - LDPC error correction
+
+- Short gi `-G`: bool
+    - Short guard interval for more throughput
+
+- Bandwidth `-B`: 
+    - HT: [10, 20, 40] mhz
+    - VHT: [10, 20, 40, 80, 160] mhz
+
+- FEC: Reed-Solomon: (https://github.com/tahoe-lafs/zfec)
+    - `-n`: 1..=256
+    - `-k`: 1..=n
+    - `-T`: timeout
+
+- MCS `-M`: (encoding scheme, qam etc, search WIFI MCS)
+    - HT: 0..=11
+    - VHT: 0..=9
+
+- STBC `-S`: bool
+    - Transmit multiple copies
+
+- Data frame type `-f`: ['data', 'rts']
