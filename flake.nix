@@ -71,7 +71,10 @@
       in {
         nixosModules.wfb = (import ./module.nix) wfb-cli (import ./driver.nix);
 
-        packages.default = wfb-cli;
+        packages.default = pkgs.symlinkJoin {
+          name = "wfb";
+          paths = [wfb-cli wfb-ng];
+        };
 
         devShell = pkgs.mkShell {
           nativeBuildInputs = [wfb-cli wfb-ng];
